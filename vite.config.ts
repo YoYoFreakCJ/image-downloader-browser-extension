@@ -25,7 +25,7 @@ export default defineConfig({
   build: {
     outDir: resolve(rootDir, 'dist'),
     /** Can slow down build speed. */
-    // sourcemap: isDev,
+    sourcemap: isDev,
     minify: isProduction,
     modulePreload: false,
     reportCompressedSize: isProduction,
@@ -43,6 +43,7 @@ export default defineConfig({
         newtab: resolve(pagesDir, 'newtab', 'index.html'),
         options: resolve(pagesDir, 'options', 'index.html'),
         sidepanel: resolve(pagesDir, 'sidepanel', 'index.html'),
+        download: resolve(pagesDir, 'download', 'index.html'),
       },
       output: {
         entryFileNames: 'src/pages/[name]/index.js',
@@ -53,6 +54,13 @@ export default defineConfig({
           return `assets/[ext]/${assetFileName}.chunk.[ext]`;
         },
       },
+      onLog(level, log, handler) {
+        // @ts-ignore
+        if (log.cause && log.cause.message === `Can't resolve original location of error.`) {
+          return
+        }
+        handler(level, log)
+      }
     },
   },
   test: {

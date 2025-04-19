@@ -1,0 +1,87 @@
+@import '../../../../style-tokens.generated.scss';
+
+.selectable-image-container {
+    // Common settings
+    transition: outline $transitions-fast, background-color $transitions-fast;
+    border-radius: $borders-borderRadius;
+    outline: 1px solid $colors-lightGray;
+    background-color: $colors-gray;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    .selectable-image-checkmark {
+        transition: fill $transitions-fast, opacity $transitions-fast;
+        fill: $colors-paleLightBlue;
+
+        line {
+            stroke: white;
+            stroke-width: 5px;
+            stroke-linecap: round;
+        }
+    }
+
+    // Not downloaded
+    &:not([data-downloaded=true]) {
+        cursor: pointer;
+
+        // Not selected
+        &:not([data-selected=true]) {
+            .selectable-image-checkmark {
+                opacity: 0;
+            }
+
+            &:hover {
+                outline: 3px solid $colors-paleLightBlue;
+            }
+        }
+
+        // Selected
+        &[data-selected=true] {
+            outline: 5px solid $colors-lightBlue;
+
+            .selectable-image-checkmark {
+                opacity: 1;
+                fill: $colors-lightBlue;
+            }
+
+            &:hover {
+                outline: 8px solid $colors-paleLightBlue;
+
+                .selectable-image-checkmark {
+                    fill: $colors-paleLightBlue;
+                }
+            }
+        }
+    }
+
+    // Downloaded
+    &[data-downloaded=true] {
+        cursor: not-allowed;
+        outline: 5px solid $colors-green;
+
+        .selectable-image-checkmark {
+            opacity: 1;
+            fill: $colors-green;
+        }
+    }
+
+    .selectable-image-container-header {
+        z-index: 1000;
+        cursor: pointer;
+        transition: outline-width $transitions-fast;
+        outline-color: $colors-lightBlue;
+        outline-style: solid;
+        outline-width: 0px;
+        border-radius: $borders-borderRadius;
+
+        &:hover {
+            outline-width: 5px;
+        }
+    }
+
+    .selectable-image-container-footer {
+        z-index: 1000;
+        background-color: $colors-lightGray;
+    }
+}
