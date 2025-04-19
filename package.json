@@ -17,11 +17,9 @@
     "dev": "pnpm build:hmr && (run-p wss build:watch)",
     "dev:firefox": "pnpm build:hmr && (run-p wss build:firefox:watch)",
     "test": "vitest",
-    "commitlint": "commitlint --edit",
     "lint": "eslint src --ext .ts,.js,.tsx,.jsx",
     "lint:fix": "pnpm lint --fix",
-    "prettier": "prettier . --write",
-    "prepare": "husky install"
+    "prettier": "prettier . --write"
   },
   "type": "module",
   "dependencies": {
@@ -31,8 +29,6 @@
     "webextension-polyfill": "0.10.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "18.4.4",
-    "@commitlint/config-conventional": "18.1.0",
     "@rollup/plugin-sucrase": "^5.0.2",
     "@rollup/plugin-typescript": "11.1.6",
     "@testing-library/react": "14.0.0",
@@ -71,10 +67,17 @@
     "ws": "8.14.2"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "prettier --write",
-      "eslint --fix"
-    ]
+    "*.{js,ts,jsx,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ],
+    "*.css": [
+      "prettier --write"
+    ],
+    ".{gitignore,npmrc}": []
   },
   "packageManager": "pnpm@8.9.2"
 }
