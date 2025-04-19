@@ -5,11 +5,11 @@ import { useSettings } from '../../Contexts/SettingsContext';
 import SelectableImageContainer from '../SelectableImageContainer/SelectableImageContainer';
 
 const Content = () => {
-    const { images } = useImages();
+    const { filteredImages } = useImages();
     const { settings } = useSettings();
 
     return <Box display="flex" flexDirection="row" gap="20px" flexWrap="wrap" p={3}>
-        {images.map(img => <SelectableImageContainer image={img} />)}
+        {filteredImages.map(img => <SelectableImageContainer image={img} />)}
     </Box>;
 };
 

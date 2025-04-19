@@ -13,12 +13,15 @@ const SelectableImageContainerHeader = (props: SelectableImageContainerHeader) =
 
     return <Box
         className='selectable-image-container-header'
-        sx={{ backgroundColor: tokens.colors.paleLightBlue }} display={settings.ShowSourceInformation ? 'flex' : 'none'} flexDirection='row' p={.5} gap='4px'>
+        sx={{ backgroundColor: tokens.colors.paleLightBlue }} display={settings.ShowSourceInformation ? 'flex' : 'none'} flexDirection='row' p={.5} gap='4px'
+        width={settings.PreviewSizeInPx}>
         <Box
             component='img'
             src={props.image.sourceIconUrl}
             width='20px' />
-        <Typography variant='caption'>{props.image.fileName}</Typography>
+        <Typography variant='caption' noWrap sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
+            {props.image.fileName}
+        </Typography>
     </Box>;
 };
 

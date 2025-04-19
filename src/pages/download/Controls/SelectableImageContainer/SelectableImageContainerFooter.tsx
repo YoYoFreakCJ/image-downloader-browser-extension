@@ -14,11 +14,9 @@ const SelectableImageContainerFooter = (props: SelectableImageContainerFooterPro
     const theme = useTheme();
 
     return <Box
-        zIndex={1000}
         sx={{ backgroundColor: tokens.colors.lightGray }}
         display={settings.ShowSizeInformation ? 'flex' : 'none'} flexDirection='row' p={.5} gap='4px'
-        borderTop={`1px solid ${theme.palette.divider}`}
-    >
+        borderTop={`1px solid ${theme.palette.divider}`}>
         <Typography variant='caption' color='text.secondary'
             lineHeight={1}>
             {props.image.widthInPx}px x {props.image.heightInPx}px
