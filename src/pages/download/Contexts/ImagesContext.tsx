@@ -74,7 +74,8 @@ export const ImagesProvider = (props: React.PropsWithChildren) => {
                             sourceIconUrl: tab.favIconUrl!,
                             fileName: img.url.split('/').pop()!,
                             widthInPx: img.widthInPx,
-                            heightInPx: img.heightInPx
+                            heightInPx: img.heightInPx,
+                            tabId: tab.id!
                         };
 
                         dispatch({ type: 'add', image: selectableImg });

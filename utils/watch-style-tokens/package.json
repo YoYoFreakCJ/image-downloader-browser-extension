@@ -1,0 +1,13 @@
+{
+  "type": "commonjs",
+  "scripts": {
+    "watch:tokens": "pnpm exec tsx watch-style-tokens.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.2",
+    "chokidar": "^4.0.3",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
+  }
+}

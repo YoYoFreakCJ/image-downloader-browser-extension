@@ -22,6 +22,10 @@ export const tokens = {
         fast: '150ms'
     },
     borders: {
-        borderRadius: '4px'
+        borderRadius: '4px',
+        outlineThickness: {
+            default: '4px',
+            hovered: '6px'
+        }
     }
 };

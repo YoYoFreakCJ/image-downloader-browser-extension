@@ -4,4 +4,5 @@ export interface Image {
     fileName: string;
     widthInPx: number;
     heightInPx: number;
+    tabId: number;
 }

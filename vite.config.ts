@@ -1,5 +1,5 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite';
+import { defineConfig, Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import path, { resolve } from 'path';
 import { getCacheInvalidationKey, getPlugins } from './utils/vite';

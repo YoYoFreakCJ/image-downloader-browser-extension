@@ -38,7 +38,7 @@
 
         // Selected
         &[data-selected=true] {
-            outline: 5px solid $colors-lightBlue;
+            outline: $borders-outlineThickness-default solid $colors-lightBlue;
 
             .selectable-image-checkmark {
                 opacity: 1;
@@ -46,7 +46,7 @@
             }
 
             &:hover {
-                outline: 8px solid $colors-paleLightBlue;
+                outline: $borders-outlineThickness-hovered solid $colors-paleLightBlue;
 
                 .selectable-image-checkmark {
                     fill: $colors-paleLightBlue;
@@ -70,13 +70,14 @@
         z-index: 1000;
         cursor: pointer;
         transition: outline-width $transitions-fast;
-        outline-color: $colors-lightBlue;
+        outline-color: $colors-paleLightBlue;
         outline-style: solid;
         outline-width: 0px;
         border-radius: $borders-borderRadius;
 
         &:hover {
-            outline-width: 5px;
+            outline-width: $borders-outlineThickness-hovered;
+            outline-color: $colors-white;
         }
     }
 
