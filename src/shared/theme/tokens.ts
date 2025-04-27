@@ -4,7 +4,8 @@ type colors = {
     paleLightBlue: string,
     green: string,
     gray: string,
-    lightGray: string
+    lightGray: string,
+    white: string
 };
 
 // Switching modes is not supported, it's only dark mode for now.
@@ -13,7 +14,8 @@ const darkColors: colors = {
     paleLightBlue: '#54ADE0',
     green: '#12c841',
     gray: 'rgb(30, 30, 30)',
-    lightGray: '#ffffff1f'
+    lightGray: '#ffffff1f',
+    white: '#ffffff'
 };
 
 export const tokens = {

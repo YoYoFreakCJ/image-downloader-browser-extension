@@ -1,4 +1,4 @@
-@import '../../../../style-tokens.generated.scss';
+@use '../../../../style-tokens.generated.scss' as *;
 
 .selectable-image-container {
     // Common settings

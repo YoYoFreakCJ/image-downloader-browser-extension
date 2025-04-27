@@ -1,6 +1,5 @@
 import chokidar from 'chokidar';
 import { writeFileSync } from 'fs';
-import path from 'path';
 
 const inputTsPath = '../../src/shared/theme/tokens.ts';
 const outputPath = '../../src/style-tokens.generated.scss';
@@ -45,3 +44,14 @@ watcher.on('change', () => {
   delete require.cache[require.resolve(inputTsPath)];
   generateScss();
 });
+
+const shutdown = () => {
+  console.log('[watch-style-tokens] Shutting down watcher...');
+  watcher.close().then(() => {
+    console.log('[watch-style-tokens] Watcher closed.');
+    process.exit(0);
+  });
+};
+
+process.on('SIGINT', shutdown);   // Ctrl+C
+process.on('SIGTERM', shutdown);  // kill-command
