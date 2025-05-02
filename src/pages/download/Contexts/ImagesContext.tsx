@@ -36,7 +36,7 @@ const ImagesReducer = (state: SelectableImage[], action: ImageAction): Selectabl
 
         case 'deselectAll':
             return state.map(img => ({ ...img, selected: img.downloaded ? img.selected : false }));
-        
+
         case 'markAsDownloaded':
             return state.map(img => img === action.image ? { ...img, downloaded: true, selected: false } : img);
 
@@ -74,7 +74,9 @@ export const ImagesProvider = (props: React.PropsWithChildren) => {
         const tabs = await chrome.tabs.query({ currentWindow: true });
         const prms: Promise<void>[] = [];
 
-        for (const tab of tabs) {
+        const downloadTabId = (await chrome.tabs.getCurrent()).id;
+
+        for (const tab of tabs.filter(t => t.id !== downloadTabId)) {
             const p = new Promise<void>(resolve => {
                 chrome.tabs.sendMessage(tab.id!, { type: MessageTypes.GetImagesAllTabs }, response => {
                     const images = response.images as Image[];
