@@ -6,10 +6,11 @@ export interface Settings {
     ShowSizeInformation: boolean;
     FilterMinWidth: boolean;
     FilterMaxWidth: boolean;
-    MinWidthInPx: number
-    MaxWidthInPx: number
+    MinWidthInPx: number;
+    MaxWidthInPx: number;
     FilterMinHeight: boolean;
     FilterMaxHeight: boolean;
-    MinHeightInPx: number
-    MaxHeightInPx: number
+    MinHeightInPx: number;
+    MaxHeightInPx: number;
+    ConflictAction: string;
 }

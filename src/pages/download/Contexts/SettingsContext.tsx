@@ -29,7 +29,8 @@ const initialSettings: Settings = {
     FilterMinHeight: true,
     MinHeightInPx: 10,
     FilterMaxHeight: true,
-    MaxHeightInPx: 1000
+    MaxHeightInPx: 1000,
+    ConflictAction: "uniquify"
 };
 
 export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

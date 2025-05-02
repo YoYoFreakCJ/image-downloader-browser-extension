@@ -38,6 +38,8 @@ const SelectableImageContainer = (props: SelectableImageContainerProps) => {
     };
 
     const onClick = useCallback(() => {
+        if (props.image.downloaded === true) return;
+
         if (props.image.selected === true) {
             deselect(props.image);
         }

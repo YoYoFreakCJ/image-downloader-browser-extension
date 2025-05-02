@@ -1,4 +1,4 @@
-import { Box, Checkbox, FormControlLabel, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, IconButton, MenuItem, Select, Tooltip, Typography, useTheme } from '@mui/material';
 import React from 'react';
 import { useCallback } from 'react';
 import { useSettings } from '../../Contexts/SettingsContext';
@@ -85,6 +85,15 @@ export const SettingsPanel: React.FC = () => {
                 </SettingsGroup>
 
                 <HorizontalDivider />
+
+                <SettingsGroup title="Conflict Action">
+                    <Select onChange={e => setSettings({ ConflictAction: e.target.value })}
+                        value={settings.ConflictAction} size="small">
+                        <MenuItem value="uniquify">Uniquify</MenuItem>
+                        <MenuItem value="overwrite">Overwrite</MenuItem>
+                        <MenuItem value="prompt">Prompt</MenuItem>
+                    </Select>
+                </SettingsGroup>
 
                 <SettingsGroup title="Colors">
                     <Box display="flex" flexDirection="row" gap={settingsGap}>

@@ -12,7 +12,10 @@ type ImageAction =
     | { type: "add"; image: SelectableImage }
     | { type: "clear" }
     | { type: "select"; image: SelectableImage }
-    | { type: "deselect"; image: SelectableImage };
+    | { type: "deselect"; image: SelectableImage }
+    | { type: "selectAll" }
+    | { type: "deselectAll" }
+    | { type: "markAsDownloaded"; image: SelectableImage };
 
 const ImagesReducer = (state: SelectableImage[], action: ImageAction): SelectableImage[] => {
     switch (action.type) {
@@ -28,6 +31,15 @@ const ImagesReducer = (state: SelectableImage[], action: ImageAction): Selectabl
         case 'deselect':
             return state.map(img => img === action.image ? { ...img, selected: false } : img);
 
+        case 'selectAll':
+            return state.map(img => ({ ...img, selected: img.downloaded ? img.selected : true }));
+
+        case 'deselectAll':
+            return state.map(img => ({ ...img, selected: img.downloaded ? img.selected : false }));
+        
+        case 'markAsDownloaded':
+            return state.map(img => img === action.image ? { ...img, downloaded: true, selected: false } : img);
+
         default:
             return state;
     };
@@ -42,6 +54,7 @@ type ImagesContextType = {
     deselect: (image: SelectableImage) => void;
     selectAll: () => void;
     deselectAll: () => void;
+    markAsDownloaded: (image: SelectableImage) => void;
 };
 
 const ImagesContext = createContext<ImagesContextType | undefined>(undefined);
@@ -112,25 +125,19 @@ export const ImagesProvider = (props: React.PropsWithChildren) => {
         for (const image of images) {
             dispatch({ type: 'add', image });
         }
-    }, [dispatch]);
+    }, []);
 
-    const clear = useCallback(() => dispatch({ type: 'clear' }), [dispatch]);
+    const clear = useCallback(() => dispatch({ type: 'clear' }), []);
 
-    const select = useCallback((image: SelectableImage) => dispatch({ type: 'select', image }), [dispatch]);
+    const select = useCallback((image: SelectableImage) => dispatch({ type: 'select', image }), []);
 
-    const deselect = useCallback((image: SelectableImage) => dispatch({ type: 'deselect', image }), [dispatch]);
+    const deselect = useCallback((image: SelectableImage) => dispatch({ type: 'deselect', image }), []);
 
-    const selectAll = useCallback(() => {
-        for (const image of images) {
-            dispatch({ type: 'select', image });
-        }
-    }, [dispatch]);
+    const selectAll = useCallback(() => { dispatch({ type: 'selectAll' }); }, []);
 
-    const deselectAll = useCallback(() => {
-        for (const image of images) {
-            dispatch({ type: 'deselect', image });
-        }
-    }, [dispatch]);
+    const deselectAll = useCallback(() => { dispatch({ type: 'deselectAll' }); }, []);
+
+    const markAsDownloaded = useCallback((image: SelectableImage) => { dispatch({ type: 'markAsDownloaded', image }); }, []);
 
     return <ImagesContext.Provider value={{
         images,
@@ -140,7 +147,8 @@ export const ImagesProvider = (props: React.PropsWithChildren) => {
         select,
         deselect,
         selectAll,
-        deselectAll
+        deselectAll,
+        markAsDownloaded
     }}>
         {props.children}
     </ImagesContext.Provider>;

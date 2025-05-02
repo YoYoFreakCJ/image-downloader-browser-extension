@@ -5,7 +5,7 @@ interface SettingsGroupProps extends React.PropsWithChildren {
 };
 
 const SettingsGroup = (props: SettingsGroupProps) => {
-    return <Box>
+    return <Box display='flex' flexDirection='column'>
         <Typography variant="overline">{props.title}</Typography>
         {props.children}
     </Box>
