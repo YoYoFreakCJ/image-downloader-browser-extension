@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useMemo, useState } from "react";
 import { Image } from "../Model/Image";
 import { useCallback } from "react";
 import { SelectableImage } from "../Model/SelectableImage";
@@ -42,6 +42,7 @@ const ImagesReducer = (state: SelectableImage[], action: ImageAction): Selectabl
             return state.map(img => img.url === action.image.url ? { ...img, downloaded: true, selected: false } : img);
 
         default:
+            const exhaustiveCheck: never = action;
             return state;
     };
 };
@@ -68,20 +69,18 @@ export const ImagesProvider = (props: React.PropsWithChildren) => {
     const [sourceInfo, setSourceInfo] = useState<SourceInfo>({} as SourceInfo);
 
     useEffect(() => { onLoad(); }, []);
-    useEffect(() => { onImagesChange(); }, [images]);
-    useEffect(() => { onSettingsChange(); }, [settings]);
 
     const onLoad = useCallback(async () => {
         dispatch({ type: 'clear' });
 
-        const tabs = await chrome.tabs.query({ currentWindow: true });
+        const tabsToDownloadFrom = (await chrome.tabs.query({ currentWindow: true })).filter(t => t.id !== downloadTabId);
         const prms: Promise<void>[] = [];
 
         setSourceInfo({ type: "from-all-tabs", tabCount: tabsToDownloadFrom.length });
 
         const downloadTabId = (await chrome.tabs.getCurrent()).id;
 
-        for (const tab of tabs.filter(t => t.id !== downloadTabId)) {
+        for (const tab of tabsToDownloadFrom) {
             const p = new Promise<void>(resolve => {
                 chrome.tabs.sendMessage(tab.id!, { type: MessageTypes.GetImagesAllTabs }, response => {
                     const images = response.images as Image[];
@@ -111,13 +110,9 @@ export const ImagesProvider = (props: React.PropsWithChildren) => {
         await Promise.all(prms);
     }, []);
 
-    const onImagesChange = useCallback(() => {
-        setFilteredImages(images.filter(img => includeImage(img)));
-    }, [images]);
-
-    const onSettingsChange = useCallback(() => {
-        setFilteredImages(images.filter(img => includeImage(img)));
-    }, [settings]);
+    const filteredImages = useMemo(() => {
+        return images.filter(includeImage);
+    }, [images, settings]);
 
     const includeImage = useCallback((image: SelectableImage) => {
         if (settings.FilterMinHeight && image.heightInPx < settings.MinHeightInPx) return false;
@@ -166,7 +161,7 @@ export const ImagesProvider = (props: React.PropsWithChildren) => {
 export const useImages = () => {
     const context = useContext(ImagesContext);
     if (!context) {
-        throw new Error("useImages must be used in an ImagesProvider.");
+        throw new Error("useImages must be used within an ImagesProvider.");
     }
     return context;
 };
