@@ -92,7 +92,7 @@ const Header = () => {
         </Box>
       </Tooltip>
 
-      <Typography variant='caption'>{filteredImages.filter(x => x.selected).length} of {filteredImages.length} images</Typography>
+      <Typography variant='caption'>{filteredImages.filter(x => x.selected).length} of {filteredImages.length} images selected</Typography>
     </Box>
   </Box>;
 };
