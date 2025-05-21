@@ -58,8 +58,7 @@ const manifest = {
   }, ],
   browser_specific_settings: {
     gecko: {
-      guid: "12341234-1234-1234-1234-123412341234",
-      strict_min_version: "58.0"
+      id: "image-downloader@software-schmid.de"
     }
   }
 };
