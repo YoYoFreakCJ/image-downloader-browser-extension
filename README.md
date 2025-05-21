@@ -7,3 +7,5 @@ This repository holds the code for my image downloading extension.
 Run `pnpm install` in the root directory.
 
 To build for Firefox run `pnpm build:firefox`. The compiled files will be put in the **dist**-folder.
+
+This was tested using pnpm 8.9.2 on Windows 11 using Visual Studio Code.
