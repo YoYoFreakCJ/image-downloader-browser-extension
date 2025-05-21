@@ -16,26 +16,6 @@ interface SelectableImageContainerProps {
 const SelectableImageContainer = (props: SelectableImageContainerProps) => {
     const { settings } = useSettings();
     const { select, deselect } = useImages();
-    const [containerHover, setContainerHover] = useState(false);
-    const [headerHover, setHeaderHover] = useState(false);
-
-    const onMouseEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-        const { isContainer, isHeader } = getHoverData(e.target as HTMLElement);
-
-        setContainerHover(isContainer);
-        setHeaderHover(isHeader);
-    }, []);
-
-    const onMouseLeave = useCallback(() => {
-
-    }, []);
-
-    const getHoverData = (target: HTMLElement) => {
-        const isContainer = target.classList.contains('selectable-image-container-header');
-        const isHeader = target.classList.contains('selectable-image-container');
-
-        return { isContainer, isHeader };
-    };
 
     const onClick = useCallback(() => {
         if (props.image.downloaded === true) return;
@@ -52,8 +32,7 @@ const SelectableImageContainer = (props: SelectableImageContainerProps) => {
         className='selectable-image-container'
         onClick={onClick}
         data-selected={props.image.selected}
-        data-downloaded={props.image.downloaded}
-        onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+        data-downloaded={props.image.downloaded}>
         <SelectableImageContainerHeader image={props.image} />
         <Box
             component='img'
