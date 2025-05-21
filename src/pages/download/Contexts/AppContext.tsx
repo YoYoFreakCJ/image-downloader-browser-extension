@@ -5,7 +5,7 @@ import { useState } from "react";
 import { createContext } from "react";
 
 type AppContextType = {
-    showSuccessNotification: (message: string) => void
+    showSuccessNotification: (message: string) => void;
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
