@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { MessageTypes } from "@root/src/MessageTypes";
 import { useSettings } from "./SettingsContext";
 import { SourceInfo } from "../Model/SourceInfo";
+import { useLoading } from "./LoadingContext";
 
 type ImageAction =
     | { type: "add"; image: SelectableImage }
@@ -67,18 +68,21 @@ export const ImagesProvider = (props: React.PropsWithChildren) => {
     const [images, dispatch] = useReducer(ImagesReducer, []);
     const { settings } = useSettings();
     const [sourceInfo, setSourceInfo] = useState<SourceInfo>({} as SourceInfo);
+    const loading = useLoading();
 
     useEffect(() => { onLoad(); }, []);
 
     const onLoad = useCallback(async () => {
         dispatch({ type: 'clear' });
 
+        const downloadTabId = (await chrome.tabs.getCurrent()).id;
+
         const tabsToDownloadFrom = (await chrome.tabs.query({ currentWindow: true })).filter(t => t.id !== downloadTabId);
         const prms: Promise<void>[] = [];
 
-        setSourceInfo({ type: "from-all-tabs", tabCount: tabsToDownloadFrom.length });
+        const loadingId = loading.addLoading(`Loading images from ${tabsToDownloadFrom.length} tabs...`);
 
-        const downloadTabId = (await chrome.tabs.getCurrent()).id;
+        setSourceInfo({ type: "from-all-tabs", tabCount: tabsToDownloadFrom.length });
 
         for (const tab of tabsToDownloadFrom) {
             const p = new Promise<void>(resolve => {
@@ -108,11 +112,9 @@ export const ImagesProvider = (props: React.PropsWithChildren) => {
         }
 
         await Promise.all(prms);
-    }, []);
 
-    const filteredImages = useMemo(() => {
-        return images.filter(includeImage);
-    }, [images, settings]);
+        loading.removeLoading(loadingId);
+    }, []);
 
     const includeImage = useCallback((image: SelectableImage) => {
         if (settings.FilterMinHeight && image.heightInPx < settings.MinHeightInPx) return false;
@@ -122,6 +124,10 @@ export const ImagesProvider = (props: React.PropsWithChildren) => {
 
         return true;
     }, [settings]);
+
+    const filteredImages = useMemo(() => {
+        return images.filter(includeImage);
+    }, [images, settings]);
 
     const add = useCallback((...images: SelectableImage[]) => {
         for (const image of images) {

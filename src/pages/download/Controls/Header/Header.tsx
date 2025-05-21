@@ -5,6 +5,7 @@ import { useCallback } from 'react';
 import { useImages } from '../../Contexts/ImagesContext';
 import { SettingsGroup } from './SettingsGroup';
 import { SelectableImage } from '../../Model/SelectableImage';
+import { useLoading } from '../../Contexts/LoadingContext';
 
 const VerticalDivider = () => {
   const theme = useTheme();
@@ -15,6 +16,7 @@ const VerticalDivider = () => {
 const Header = () => {
   const theme = useTheme();
   const { selectAll, deselectAll, filteredImages, markAsDownloaded } = useImages();
+  const loading = useLoading();
 
   const { settings, updateSettings } = useSettings();
 
@@ -30,12 +32,14 @@ const Header = () => {
     selectAll();
   }, []);
 
-  const onDownloadClick = useCallback(() => {
+  const onDownloadClick = useCallback(async () => {
     const selectedImages = filteredImages.filter(x => x.selected);
 
-    for (const img of selectedImages) {
-      downloadImage(img);
-    }
+    const loadingId = loading.addLoading(`Downloading ${selectedImages.length} images...`);
+
+    await Promise.all(selectedImages.map(downloadImage));
+
+    loading.removeLoading(loadingId);
   }, [filteredImages]);
 
   const downloadImage = useCallback(async (img: SelectableImage) => {

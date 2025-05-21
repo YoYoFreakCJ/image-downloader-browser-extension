@@ -5,6 +5,7 @@ import { useCallback } from "react";
 import { useColorScheme } from "@mui/material";
 import { useApp } from "./AppContext";
 import { useRef } from "react";
+import { useLoading } from "./LoadingContext";
 
 const settingsChromeStorageKey = "settings";
 const delayBeforeUpdateInMs = 500;
@@ -39,16 +40,21 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const [settings, setSettings] = useState<Settings>(initialSettings);
     const { setMode } = useColorScheme();
     const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const loading = useLoading();
 
     useEffect(() => {
         onLoad();
     }, []);
 
     const onLoad = useCallback(async () => {
+        const loadingId = loading.addLoading("Loading settings...");
+
         const settingsFromStorage = (await chrome.storage.sync.get(settingsChromeStorageKey))[settingsChromeStorageKey] as Settings;
 
         setSettings(settingsFromStorage);
-    }, []);
+
+        loading.removeLoading(loadingId);
+    }, [loading]);
 
     const updateSettings = useCallback((newSettings: Partial<Settings>) => {
         setSettings({ ...settings, ...newSettings });
