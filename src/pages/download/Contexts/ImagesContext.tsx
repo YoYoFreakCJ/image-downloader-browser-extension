@@ -27,10 +27,10 @@ const ImagesReducer = (state: SelectableImage[], action: ImageAction): Selectabl
             return [];
 
         case 'select':
-            return state.map(img => img === action.image ? { ...img, selected: true } : img);
+            return state.map(img => img.url === action.image.url ? { ...img, selected: true } : img);
 
         case 'deselect':
-            return state.map(img => img === action.image ? { ...img, selected: false } : img);
+            return state.map(img => img.url === action.image.url ? { ...img, selected: false } : img);
 
         case 'selectAll':
             return state.map(img => ({ ...img, selected: img.downloaded ? img.selected : true }));
@@ -39,7 +39,7 @@ const ImagesReducer = (state: SelectableImage[], action: ImageAction): Selectabl
             return state.map(img => ({ ...img, selected: img.downloaded ? img.selected : false }));
 
         case 'markAsDownloaded':
-            return state.map(img => img === action.image ? { ...img, downloaded: true, selected: false } : img);
+            return state.map(img => img.url === action.image.url ? { ...img, downloaded: true, selected: false } : img);
 
         default:
             return state;
