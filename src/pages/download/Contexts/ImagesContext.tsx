@@ -7,6 +7,7 @@ import { useContext } from "react";
 import { useEffect } from "react";
 import { MessageTypes } from "@root/src/MessageTypes";
 import { useSettings } from "./SettingsContext";
+import { SourceInfo } from "../Model/SourceInfo";
 
 type ImageAction =
     | { type: "add"; image: SelectableImage }
@@ -48,6 +49,7 @@ const ImagesReducer = (state: SelectableImage[], action: ImageAction): Selectabl
 type ImagesContextType = {
     images: SelectableImage[];
     filteredImages: SelectableImage[];
+    sourceInfo: SourceInfo;
     add: (...images: SelectableImage[]) => void;
     clear: () => void;
     select: (image: SelectableImage) => void;
@@ -55,6 +57,7 @@ type ImagesContextType = {
     selectAll: () => void;
     deselectAll: () => void;
     markAsDownloaded: (image: SelectableImage) => void;
+    setSourceInfo: (sourceInfo: SourceInfo) => void;
 };
 
 const ImagesContext = createContext<ImagesContextType | undefined>(undefined);
@@ -62,7 +65,7 @@ const ImagesContext = createContext<ImagesContextType | undefined>(undefined);
 export const ImagesProvider = (props: React.PropsWithChildren) => {
     const [images, dispatch] = useReducer(ImagesReducer, []);
     const { settings } = useSettings();
-    const [filteredImages, setFilteredImages] = useState<SelectableImage[]>([]);
+    const [sourceInfo, setSourceInfo] = useState<SourceInfo>({} as SourceInfo);
 
     useEffect(() => { onLoad(); }, []);
     useEffect(() => { onImagesChange(); }, [images]);
@@ -73,6 +76,8 @@ export const ImagesProvider = (props: React.PropsWithChildren) => {
 
         const tabs = await chrome.tabs.query({ currentWindow: true });
         const prms: Promise<void>[] = [];
+
+        setSourceInfo({ type: "from-all-tabs", tabCount: tabsToDownloadFrom.length });
 
         const downloadTabId = (await chrome.tabs.getCurrent()).id;
 
@@ -144,13 +149,15 @@ export const ImagesProvider = (props: React.PropsWithChildren) => {
     return <ImagesContext.Provider value={{
         images,
         filteredImages,
+        sourceInfo,
         add,
         clear,
         select,
         deselect,
         selectAll,
         deselectAll,
-        markAsDownloaded
+        markAsDownloaded,
+        setSourceInfo
     }}>
         {props.children}
     </ImagesContext.Provider>;
