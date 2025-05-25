@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material';
 import { useImages } from '../../Contexts/ImagesContext';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import { FromAllTabsSourceInfo } from '../../Model/FromAllTabsSourceInfo';
 
 const Footer: React.FC = () => {
   const theme = useTheme();
@@ -22,7 +23,7 @@ const Footer: React.FC = () => {
         <HelpOutlineIcon fontSize="small" color="primary" sx={{ m: 1 }} />
       </Box>
       <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic', marginRight: 1 }}>
-        Showing {images.filteredImages.length} of {images.images.length} images
+        Showing {images.filteredImages.length} of {images.images.length} images from {images.sourceInfo.tabCount} tabs
       </Typography>
     </Box>
   </Box>;
