@@ -1,7 +1,7 @@
 {
-  "name": "chrome-extension-boilerplate-react-vite",
-  "version": "0.0.1",
-  "description": "chrome extension boilerplate",
+  "name": "image-downloader",
+  "version": "0.0.3",
+  "description": "image downloader",
   "license": "MIT",
   "repository": {
     "type": "git",
