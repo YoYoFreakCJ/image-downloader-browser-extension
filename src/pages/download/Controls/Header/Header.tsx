@@ -43,7 +43,11 @@ const Header = () => {
   }, [filteredImages]);
 
   const downloadImage = useCallback(async (img: SelectableImage) => {
-    await chrome.downloads.download({ url: img.url, conflictAction: settings.ConflictAction as chrome.downloads.FilenameConflictAction });
+    await chrome.downloads.download({
+      url: img.url,
+      filename: img.fileName,
+      conflictAction: settings.ConflictAction as chrome.downloads.FilenameConflictAction
+    });
 
     markAsDownloaded(img);
   }, [settings]);

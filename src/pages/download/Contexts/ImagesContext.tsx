@@ -64,6 +64,24 @@ type ImagesContextType = {
 
 const ImagesContext = createContext<ImagesContextType | undefined>(undefined);
 
+const getImageFileExtension = async (img: Image) => {
+    const rsp = await fetch(img.url);
+    const blob = await rsp.blob();
+    const contentType = blob.type;
+
+    const mimeToExt = {
+        "image/jpeg": "jpg",
+        "image/png": "png",
+        "image/gif": "gif",
+        "image/webp": "webp",
+        "image/bmp": "bmp",
+        "image/svg+xml": "svg",
+        "image/avif": "avif"
+    };
+
+    return mimeToExt[contentType.toLocaleLowerCase()] || "jpg"; // Default to jpg if unknown.
+};
+
 export const ImagesProvider = (props: React.PropsWithChildren) => {
     const [images, dispatch] = useReducer(ImagesReducer, []);
     const { settings } = useSettings();
@@ -86,16 +104,28 @@ export const ImagesProvider = (props: React.PropsWithChildren) => {
 
         for (const tab of tabsToDownloadFrom) {
             const p = new Promise<void>(resolve => {
-                chrome.tabs.sendMessage(tab.id!, { type: MessageTypes.GetImagesAllTabs }, response => {
+                chrome.tabs.sendMessage(tab.id!, { type: MessageTypes.GetImagesAllTabs }, async response => {
+                    if (!response) {
+                        console.warn(`No response from tab ${tab.id} (${tab.url}).`);
+                        resolve();
+                        return;
+                    }
+
                     const images = response.images as Image[];
 
                     for (const img of images) {
+                        let fileName = img.url.split('/').pop()!.split('?')[0];
+                        if (!fileName.includes('.')) {
+                            const ext = await getImageFileExtension(img);
+                            fileName += `.${ext}`;
+                        }
+
                         const selectableImg: SelectableImage = {
                             selected: true,
                             downloaded: false,
                             url: img.url,
                             sourceIconUrl: tab.favIconUrl!,
-                            fileName: img.url.split('/').pop()!,
+                            fileName,
                             widthInPx: img.widthInPx,
                             heightInPx: img.heightInPx,
                             tabId: tab.id!
