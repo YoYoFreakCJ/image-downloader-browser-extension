@@ -10,3 +10,14 @@ reloadOnUpdate('pages/background');
 reloadOnUpdate('pages/content/style.scss');
 
 console.log('background loaded');
+
+chrome.commands.onCommand.addListener(cmd => {
+    switch (cmd) {
+        case 'download-images-all-tabs-current-window':
+            chrome.tabs.create({ active: true, url: 'src/pages/download/index.html' })
+            break;
+
+        default:
+            throw new Error(`Unrecognized command: ${cmd}`);
+    }
+});

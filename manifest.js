@@ -16,7 +16,7 @@ const manifest = {
   version: packageJson.version,
   description: '__MSG_extensionDescription__',
   host_permissions: ['<all_urls>'],
-  permissions: ['storage', 'sidePanel', 'scripting'],
+  permissions: ['storage', 'sidePanel', 'scripting', 'tabs', 'downloads'],
   side_panel: {
     default_path: 'src/pages/sidepanel/index.html',
   },
@@ -25,18 +25,22 @@ const manifest = {
     service_worker: 'src/pages/background/index.js',
     type: 'module',
   },
+  commands: {
+    "download-images-all-tabs-current-window": {
+      suggested_key: {
+        default: "Alt+A"
+      },
+      description: "Opens the page to download all images from all tabs of the current window."
+    }
+  },
   action: {
     default_popup: 'src/pages/popup/index.html',
     default_icon: 'icon-34.png',
   },
-  chrome_url_overrides: {
-    newtab: 'src/pages/newtab/index.html',
-  },
   icons: {
     128: 'icon-128.png',
   },
-  content_scripts: [
-    {
+  content_scripts: [{
       matches: ['http://*/*', 'https://*/*', '<all_urls>'],
       js: ['src/pages/contentInjected/index.js'],
       // KEY for cache invalidation
@@ -48,12 +52,15 @@ const manifest = {
     },
   ],
   devtools_page: 'src/pages/devtools/index.html',
-  web_accessible_resources: [
-    {
-      resources: ['assets/js/*.js', 'assets/css/*.css', 'icon-128.png', 'icon-34.png'],
-      matches: ['*://*/*'],
-    },
-  ],
+  web_accessible_resources: [{
+    resources: ['assets/js/*.js', 'assets/css/*.css', 'icon-128.png', 'icon-34.png'],
+    matches: ['*://*/*'],
+  }, ],
+  browser_specific_settings: {
+    gecko: {
+      id: "image-downloader@software-schmid.de"
+    }
+  }
 };
 
 export default manifest;

@@ -8,3 +8,4 @@
  *
  */
 import('@pages/content/injected/toggleTheme');
+import('@root/src/pages/content/injected/getImages');
