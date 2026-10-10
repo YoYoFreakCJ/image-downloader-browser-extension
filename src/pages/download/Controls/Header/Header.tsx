@@ -6,6 +6,8 @@ import { useImages } from '../../Contexts/ImagesContext';
 import { SettingsGroup } from './SettingsGroup';
 import { SelectableImage } from '../../Model/SelectableImage';
 import { useLoading } from '../../Contexts/LoadingContext';
+import BurstModeIcon from '@mui/icons-material/BurstMode';
+import TabIcon from '@mui/icons-material/Tab';
 
 const VerticalDivider = () => {
   const theme = useTheme();
@@ -15,12 +17,12 @@ const VerticalDivider = () => {
 
 const Header = () => {
   const theme = useTheme();
-  const { selectAll, deselectAll, filteredImages, markAsDownloaded } = useImages();
+  const { selectAll, deselectAll, filteredImages, markAsDownloaded, sourceInfo } = useImages();
   const loading = useLoading();
 
   const { settings, updateSettings } = useSettings();
 
-  const onPreviewSizeSliderChanged = useCallback((_, newValue: number) => {
+  const onPreviewSizeSliderChanged = useCallback((_: Event, newValue: number) => {
     updateSettings({ PreviewSizeInPx: newValue });
   }, [settings]);
 
@@ -87,16 +89,34 @@ const Header = () => {
           <Button variant='contained' color='primary'
             sx={{
               width: '200px',
-              height: '50px',
+              height: '76px',
               fontSize: '20px',
-              fontWeight: 'bold'
+              fontWeight: 'bold',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 0
             }}
             disabled={filteredImages.filter(x => x.selected).length === 0}
-            onClick={onDownloadClick}>Download</Button>
+            onClick={onDownloadClick}>
+            Download
+            <Box display="flex" flexDirection="row" gap={2}>
+              <Tooltip title={`${filteredImages.filter(x => x.selected).length} of ${filteredImages.length} images selected`}>
+                <Box display="flex" flexDirection="row" alignItems="center" gap={0.5} sx={{ whiteSpace: 'nowrap' }}>
+                  <BurstModeIcon fontSize="small" />
+                  <Typography variant="body2">{`${filteredImages.filter(x => x.selected).length} / ${filteredImages.length}`}</Typography>
+                </Box>
+              </Tooltip>
+              <Tooltip title={`Images sourced from ${sourceInfo.tabCount} tabs`}>
+                <Box display="flex" flexDirection="row" alignItems="center" gap={0.5} sx={{ whiteSpace: 'nowrap' }}>
+                  <TabIcon fontSize="small" />
+                  <Typography variant="body2">{sourceInfo.tabCount}</Typography>
+                </Box>
+              </Tooltip>
+            </Box>
+          </Button>
         </Box>
       </Tooltip>
 
-      <Typography variant='caption'>{filteredImages.filter(x => x.selected).length} of {filteredImages.length} images selected</Typography>
     </Box>
   </Box>;
 };

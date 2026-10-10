@@ -15,8 +15,6 @@ type SettingsContextType = {
     updateSettings: (settings: Partial<Settings>) => void
 };
 
-const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
-
 const initialSettings: Settings = {
     FlyoutIsOpen: false,
     Mode: 'system',
@@ -33,6 +31,8 @@ const initialSettings: Settings = {
     MaxHeightInPx: 1000,
     ConflictAction: "uniquify"
 };
+
+const SettingsContext = createContext<SettingsContextType | undefined>({ settings: initialSettings, updateSettings: () => {} });
 
 export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const app = useApp();
@@ -51,7 +51,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
         const settingsFromStorage = (await chrome.storage.sync.get(settingsChromeStorageKey))[settingsChromeStorageKey] as Settings;
 
-        setSettings(settingsFromStorage);
+        setSettings(settingsFromStorage ?? initialSettings);
 
         loading.removeLoading(loadingId);
     }, [loading]);
