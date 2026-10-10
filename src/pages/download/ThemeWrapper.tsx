@@ -1,10 +1,10 @@
-import { useMemo } from "react";
+import { useMemo, type ReactNode } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useSettings } from "./Contexts/SettingsContext";
 import { tokens } from "@root/src/shared/theme/tokens";
 
-const ThemeWrapper = ({ children }) => {
+const ThemeWrapper = ({ children }: { children: ReactNode }) => {
     const { settings } = useSettings(); // Mode wird erst jetzt aus dem Context geholt
 
     const theme = useMemo(

@@ -9,7 +9,7 @@ export default function customDynamicImport(): PluginOption {
           left: `
           {
             const dynamicImport = (path) => import(path);
-            dynamicImport(browser.runtime.getURL('./') + 
+            return dynamicImport(browser.runtime.getURL('./') + 
             `,
           right: ".split('../').join(''))}",
         };

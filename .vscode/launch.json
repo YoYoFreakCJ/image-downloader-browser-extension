@@ -1,0 +1,34 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+    {
+        "name": "Launch Firefox Extension",
+        "type": "firefox",
+        "request": "launch",
+        "reAttach": true,
+        "preLaunchTask": "Start Firefox Dev Watcher",
+        "addonPath": "${workspaceFolder}/dist",
+        "pathMappings": [
+            {
+                "url": "moz-extension://src/",
+                "path": "${workspaceFolder}/src/"
+            },
+            {
+                "url": "moz-extension://*/",
+                "path": "${workspaceFolder}/dist/"
+            }
+        ],
+        "log": {
+            "fileName": "${env:TEMP}/vscode-firefox-debug.log",
+            "fileLevel": {
+                "PathConversion": "Debug",
+                "default": "Error"
+            },
+            "consoleLevel": {
+                "PathConversion": "Debug",
+                "default": "Error"
+            }
+        }
+    }
+    ]
+}
