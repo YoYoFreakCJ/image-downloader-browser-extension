@@ -1,6 +1,6 @@
 {
   "name": "image-downloader",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "image downloader",
   "license": "MIT",
   "repository": {
@@ -11,8 +11,9 @@
     "generate:style-tokens": "tsx utils/watch-style-tokens/watch-style-tokens.ts --once",
     "build": "pnpm generate:style-tokens && tsc --noEmit && vite build",
     "build:firefox": "pnpm generate:style-tokens && tsc --noEmit && cross-env __FIREFOX__=true vite build",
-    "build:watch": "cross-env __DEV__=true vite build -w --mode development",
-    "build:firefox:watch": "cross-env __DEV__=true __FIREFOX__=true vite build -w --mode development",
+    "build:firefox:debug": "pnpm generate:style-tokens && tsc --noEmit && cross-env __DEV__=true __HMR__=false __FIREFOX__=true vite build --mode development",
+    "build:watch": "cross-env __DEV__=true __WATCH__=true vite build -w --mode development",
+    "build:firefox:watch": "cross-env __DEV__=true __WATCH__=true __FIREFOX__=true vite build -w --mode development",
     "build:hmr": "rollup --config utils/reload/rollup.config.mjs",
     "wss": "node utils/reload/initReloadServer.js",
     "dev": "concurrently \"pnpm build:hmr\" \"run-p wss build:watch\" \"pnpm --prefix utils/watch-style-tokens run watch:tokens\"",
